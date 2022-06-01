@@ -1,9 +1,19 @@
 {
-  "dependencies": {
-    "esbuild": "^0.14.42",
-    "lodash": "^4.17.21",
-    "react": "^18.1.0",
-    "react-dom": "^18.1.0",
-    "typescript": "^4.7.2"
-  }
+    "scripts": {
+        "build_test": "tsc --lib es2022,DOM,DOM.Iterable -noEmit --jsx preserve --pretty frontend/apps/test_app/index.tsx && esbuild frontend/apps/test_app/index.tsx --bundle --sourcemap --inject:./frontend/react-shim.js --outfile=backend/static/js/test_app/index.js"
+    },
+    "dependencies": {
+        "esbuild": "^0.14.42",
+        "lodash": "^4.17.21",
+        "react": "^18.1.0",
+        "react-dom": "^18.1.0",
+        "typescript": "^4.7.2"
+    },
+    "devDependencies": {
+        "@jest/types": "^28.1.0",
+        "@types/lodash": "^4.14.182",
+        "@types/react": "^18.0.10",
+        "@types/react-dom": "^18.0.5",
+        "jest": "^28.1.0"
+    }
 }
