@@ -1,21 +1,26 @@
 {
-    "scripts": {
-        "lint_test": "tsc --lib es2022,DOM,DOM.Iterable -noEmit --jsx preserve --pretty frontend/apps/test_app/index.tsx",
-        "build_test_app": "esbuild frontend/apps/test_app/index.tsx --bundle --sourcemap --inject:./frontend/react-shim.js --outfile=backend/static/js/test_app/index.js",
-        "build_test": "npm run lint_test && npm run build_test_app"
-    },
-    "dependencies": {
-        "esbuild": "^0.14.42",
-        "lodash": "^4.17.21",
-        "react": "^18.1.0",
-        "react-dom": "^18.1.0",
-        "typescript": "^4.7.2"
-    },
-    "devDependencies": {
-        "@jest/types": "^28.1.0",
-        "@types/lodash": "^4.14.182",
-        "@types/react": "^18.0.10",
-        "@types/react-dom": "^18.0.5",
-        "jest": "^28.1.0"
-    }
+  "scripts": {
+    "lint_test": "tsc --lib es2022,DOM,DOM.Iterable -noEmit --jsx preserve --pretty frontend/apps/test_app/index.tsx",
+    "build_test_app": "esbuild frontend/apps/test_app/index.tsx --bundle --sourcemap --inject:./frontend/react-shim.js --outfile=backend/static/js/test_app/index.js",
+    "build_test": "npm run lint_test && npm run build_test_app",
+    "test": "jest"
+  },
+  "dependencies": {
+    "esbuild": "^0.14.42",
+    "lodash": "^4.17.21",
+    "react": "^18.1.0",
+    "react-dom": "^18.1.0",
+    "typescript": "^4.7.2"
+  },
+  "devDependencies": {
+    "@jest/types": "^28.1.0",
+    "@types/jest": "^27.5.2",
+    "@types/lodash": "^4.14.182",
+    "@types/react": "^18.0.10",
+    "@types/react-dom": "^18.0.5",
+    "jest": "^28.1.0",
+    "jest-environment-jsdom": "^28.1.0",
+    "jsdom": "^19.0.0",
+    "ts-jest": "^28.0.3"
+  }
 }
