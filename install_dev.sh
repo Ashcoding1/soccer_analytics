@@ -16,3 +16,8 @@ echo "Installing dev dependencies to virtual environment..."
 # NOTE: see https://stackoverflow.com/a/20720019 for the approach below
 python -m pip install -r install/requirements/dev.txt
 
+# node setup. Assumes nvm (Node version manager) is installed and available on your PATH
+nvm install v16.15.0 --lts
+nvm use v16.15.0
+npm update -g npm
+npm ci  # intall from package-lock.json only: can change to npm install if Linux/MacOS issues
