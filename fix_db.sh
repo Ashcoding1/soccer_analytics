@@ -1,4 +1,5 @@
-unzip -o archive.zip -d broken_db
+#!/bin/bash
+rm -rvf broken_db && unzip -o archive.zip -d broken_db
 echo "Unzipped archive downloaded from https://www.kaggle.com/datasets/hugomathien/soccer"
 echo "Removing broken foreign key constraints from Team_Attributes and"
 echo "Player_Attributes tables and renaming tables to plurals, snake_case..."
@@ -8,4 +9,5 @@ cp broken_db/database.sqlite backend/db.sqlite3
 echo "done."
 echo "Cleaning up..."
 rm -rvf broken_db
-echo "Success. Cleaned db available at:\n./backend/db.sqlite3"
+echo "Success. Cleaned db available at:"
+echo "/backend/db.sqlite3"
