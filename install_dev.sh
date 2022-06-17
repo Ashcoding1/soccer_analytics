@@ -5,7 +5,7 @@ set -e  # exit on error
 # Ensure we use correct python version for venv creation
 if ! command -v pyenv &> /dev/null
 then
-    echo "\`pyenv\` could not be found"
+    echo "Error: command \`pyenv\` could not be found"
     exit 1
 fi
 
@@ -25,7 +25,7 @@ python -m pip install -r install/requirements/dev.txt
 
 if ! command -v nvm &> /dev/null
 then
-    echo "\`nvm\` could not be found"
+    echo "Error: command \`nvm\` could not be found"
     exit 1
 fi
 # node setup. Assumes nvm (Node version manager) is installed and available on your PATH
