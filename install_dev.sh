@@ -21,3 +21,5 @@ nvm install v16.15.0 --lts
 nvm use v16.15.0
 npm update -g npm
 npm ci  # intall from package-lock.json only: can change to npm install if Linux/MacOS issues
+
+bash import_data.sh
