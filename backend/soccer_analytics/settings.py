@@ -78,6 +78,11 @@ DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
         "NAME": BASE_DIR / "db.sqlite3",
+        # see e.g. https://docs.djangoproject.com/en/4.0/ref/settings/#std-setting-TEST_MIGRATE
+        "TEST": {
+            "NAME": BASE_DIR / "testdb.sqlite3",
+            "MIGRATE": False,
+        },
     }
 }
 

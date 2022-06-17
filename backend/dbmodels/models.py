@@ -234,7 +234,7 @@ class PlayerAttr(Model):
     """Only columns without any nulls are id, pid, date"""
 
     # fmt: off
-    pid = models.ForeignKey(Player, on_delete=DO_NOTHING, db_column="pid", **SHARED_ARGS)
+    player = models.ForeignKey(Player, on_delete=DO_NOTHING, db_column="pid", related_name="player", **SHARED_ARGS)
     date = models.TextField(**SHARED_ARGS)
     overall_rating      = models.IntegerField(blank=True, null=True)
     potential           = models.IntegerField(blank=True, null=True)
@@ -280,6 +280,12 @@ class PlayerAttr(Model):
         managed = False
         db_table = "player_attrs"
 
+    def __str__(self) -> str:
+        date = str(self.date).replace(" 00:00:00", "")
+        return f"PlayerAttr(name={self.player.name}, date={date}, rating={self.overall_rating})"
+
+    __repr__ = __str__
+
 
 class TeamAttr(Model):
     # fmt: off
@@ -314,6 +320,6 @@ class TeamAttr(Model):
 
     def __str__(self) -> str:
         date = str(self.date).replace(" 00:00:00", "")
-        return f"Team attributes for {self.team} on {date}"
+        return f"TeamAttr(team={self.team}, date={date})"
 
     __repr__ = __str__
