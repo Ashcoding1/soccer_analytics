@@ -13,22 +13,34 @@ UNIQUE_ARGS = SHARED_ARGS | dict(unique=True)
 
 
 class Country(Model):
-    id = models.IntegerField(primary_key=True)
+    # id = models.IntegerField(primary_key=True)
     name = models.TextField(verbose_name="country name", **SHARED_ARGS)
 
     class Meta:
         managed = False
         db_table = "countries"
 
+    def __str__(self) -> str:
+        return f"{self.name}"
+
+    __repr__ = __str__
+
 
 class League(Model):
     id = models.IntegerField(primary_key=True)
-    country_id = models.OneToOneField(Country, DO_NOTHING, **SHARED_ARGS)
+    country = models.OneToOneField(
+        Country, DO_NOTHING, related_name="league_country", db_column="country_id", **SHARED_ARGS
+    )
     name = models.TextField(verbose_name="league name", **SHARED_ARGS)
 
     class Meta:
         managed = False
         db_table = "leagues"
+
+    def __str__(self) -> str:
+        return f"{self.name} ({self.country})"
+
+    __repr__ = __str__
 
 
 class Team(Model):
@@ -39,6 +51,11 @@ class Team(Model):
     class Meta:
         managed = False
         db_table = "teams"
+
+    def __str__(self) -> str:
+        return f"{self.name}"
+
+    __repr__ = __str__
 
 
 class Player(Model):
@@ -52,6 +69,11 @@ class Player(Model):
     class Meta:
         managed = False
         db_table = "players"
+
+    def __str__(self) -> str:
+        return f"{self.name}, DoB: {self.birthday}"
+
+    __repr__ = __str__
 
 
 class Match(Model):
@@ -76,8 +98,8 @@ class Match(Model):
 
     # fmt: off
     id         = models.IntegerField(primary_key=True)
-    country_id = models.ForeignKey(Country, on_delete=DO_NOTHING)
-    league_id  = models.ForeignKey(League, on_delete=DO_NOTHING)
+    country = models.ForeignKey(Country, on_delete=DO_NOTHING, related_name="country")
+    league  = models.ForeignKey(League, on_delete=DO_NOTHING, related_name="league")
     season     = models.TextField(**SHARED_ARGS)
     stage      = models.IntegerField(**SHARED_ARGS)
     date       = models.TextField(**SHARED_ARGS)
@@ -198,6 +220,15 @@ class Match(Model):
         managed = False
         db_table = "matches"
 
+    def __str__(self) -> str:
+        date = str(self.date).replace(" 00:00:00", "")
+        s0 = f"{self.league}"
+        s1 = f"{self.season} Stage {self.stage} - {date}"
+        s2 = f"{self.home_tid} vs {self.away_tid} - {self.home_goal} / {self.away_goal}"
+        return f"{s0}\n{s1}\n{s2}"
+
+    __repr__ = __str__
+
 
 class PlayerAttr(Model):
     """Only columns without any nulls are id, pid, date"""
@@ -252,7 +283,7 @@ class PlayerAttr(Model):
 
 class TeamAttr(Model):
     # fmt: off
-    tid = models.ForeignKey(Team, on_delete=DO_NOTHING, db_column="tid", blank=True, null=True)
+    team = models.ForeignKey(Team, on_delete=DO_NOTHING, db_column="tid", related_name="team", blank=True, null=True)
     date = models.TextField(blank=True, null=True)
     buildup_play_dribbling            = models.IntegerField(blank=True, null=True)  # this has nulls
     buildup_play_speed                = models.IntegerField(**SHARED_ARGS)
@@ -280,3 +311,9 @@ class TeamAttr(Model):
     class Meta:
         managed = False
         db_table = "team_attrs"
+
+    def __str__(self) -> str:
+        date = str(self.date).replace(" 00:00:00", "")
+        return f"Team attributes for {self.team} on {date}"
+
+    __repr__ = __str__
