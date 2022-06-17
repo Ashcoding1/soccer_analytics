@@ -7,4 +7,4 @@
 ignore = E203,E302,E731,W503
 max-line-length = 100
 per-file-ignores =
-    backend/models.py:E501,E241,E231,E221
+    backend/dbmodels/models.py:E501,E241,E231,E221

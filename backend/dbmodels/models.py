@@ -6,13 +6,13 @@
 #   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
 # Feel free to rename the models, but don't rename db_table values or field names.
 from django.db import models
-from django.db.models import Model
+from django.db.models import DO_NOTHING, Model
 
 SHARED_ARGS = dict(blank=False, null=False, editable=False)
 UNIQUE_ARGS = SHARED_ARGS | dict(unique=True)
 
 
-class Countries(Model):
+class Country(Model):
     id = models.IntegerField(primary_key=True)
     name = models.TextField(verbose_name="country name", **SHARED_ARGS)
 
@@ -21,9 +21,9 @@ class Countries(Model):
         db_table = "countries"
 
 
-class Leagues(Model):
+class League(Model):
     id = models.IntegerField(primary_key=True)
-    country_id = models.ForeignKey(Countries, **UNIQUE_ARGS)
+    country_id = models.OneToOneField(Country, DO_NOTHING, **SHARED_ARGS)
     name = models.TextField(verbose_name="league name", **SHARED_ARGS)
 
     class Meta:
@@ -31,7 +31,7 @@ class Leagues(Model):
         db_table = "leagues"
 
 
-class Teams(Model):
+class Team(Model):
     tid = models.IntegerField(primary_key=True)
     name = models.TextField(**SHARED_ARGS)
     code = models.CharField(max_length=3, **SHARED_ARGS)
@@ -41,7 +41,7 @@ class Teams(Model):
         db_table = "teams"
 
 
-class Players(Model):
+class Player(Model):
     pid = models.IntegerField(primary_key=True)
     name = models.TextField(**SHARED_ARGS)
     pfid = models.IntegerField(**UNIQUE_ARGS)
@@ -54,7 +54,7 @@ class Players(Model):
         db_table = "players"
 
 
-class Matches(Model):
+class Match(Model):
     """
     Note if we use pandas, then columns without NaN are:
 
@@ -76,15 +76,15 @@ class Matches(Model):
 
     # fmt: off
     id         = models.IntegerField(primary_key=True)
-    country_id = models.ForeignKey(Countries)
-    league_id  = models.ForeignKey(Leagues)
+    country_id = models.ForeignKey(Country, on_delete=DO_NOTHING)
+    league_id  = models.ForeignKey(League, on_delete=DO_NOTHING)
     season     = models.TextField(**SHARED_ARGS)
     stage      = models.IntegerField(**SHARED_ARGS)
     date       = models.TextField(**SHARED_ARGS)
     match_id   = models.IntegerField(**UNIQUE_ARGS)
 
-    home_tid  = models.ForeignKey(Teams, models.DO_NOTHING, db_column="home_tid", **SHARED_ARGS)
-    away_tid  = models.ForeignKey(Teams, models.DO_NOTHING, db_column="away_tid", **SHARED_ARGS)
+    home_tid  = models.ForeignKey(Team, on_delete=DO_NOTHING, db_column="home_tid", related_name="home_teams", **SHARED_ARGS)
+    away_tid  = models.ForeignKey(Team, on_delete=DO_NOTHING, db_column="away_tid", related_name="away_teams", **SHARED_ARGS)
     home_goal = models.IntegerField(**SHARED_ARGS)
     away_goal = models.IntegerField(**SHARED_ARGS)
 
@@ -132,28 +132,28 @@ class Matches(Model):
     away_y9  = models.IntegerField(db_column="away_Y9",  blank=True, null=True)
     away_y10 = models.IntegerField(db_column="away_Y10", blank=True, null=True)
     away_y11 = models.IntegerField(db_column="away_Y11", blank=True, null=True)
-    home_1  = models.ForeignKey(Players, models.DO_NOTHING, db_column="home_1",  blank=True, null=True)
-    home_2  = models.ForeignKey(Players, models.DO_NOTHING, db_column="home_2",  blank=True, null=True)
-    home_3  = models.ForeignKey(Players, models.DO_NOTHING, db_column="home_3",  blank=True, null=True)
-    home_4  = models.ForeignKey(Players, models.DO_NOTHING, db_column="home_4",  blank=True, null=True)
-    home_5  = models.ForeignKey(Players, models.DO_NOTHING, db_column="home_5",  blank=True, null=True)
-    home_6  = models.ForeignKey(Players, models.DO_NOTHING, db_column="home_6",  blank=True, null=True)
-    home_7  = models.ForeignKey(Players, models.DO_NOTHING, db_column="home_7",  blank=True, null=True)
-    home_8  = models.ForeignKey(Players, models.DO_NOTHING, db_column="home_8",  blank=True, null=True)
-    home_9  = models.ForeignKey(Players, models.DO_NOTHING, db_column="home_9",  blank=True, null=True)
-    home_10 = models.ForeignKey(Players, models.DO_NOTHING, db_column="home_10", blank=True, null=True)
-    home_11 = models.ForeignKey(Players, models.DO_NOTHING, db_column="home_11", blank=True, null=True)
-    away_1  = models.ForeignKey(Players, models.DO_NOTHING, db_column="away_1",  blank=True, null=True)
-    away_2  = models.ForeignKey(Players, models.DO_NOTHING, db_column="away_2",  blank=True, null=True)
-    away_3  = models.ForeignKey(Players, models.DO_NOTHING, db_column="away_3",  blank=True, null=True)
-    away_4  = models.ForeignKey(Players, models.DO_NOTHING, db_column="away_4",  blank=True, null=True)
-    away_5  = models.ForeignKey(Players, models.DO_NOTHING, db_column="away_5",  blank=True, null=True)
-    away_6  = models.ForeignKey(Players, models.DO_NOTHING, db_column="away_6",  blank=True, null=True)
-    away_7  = models.ForeignKey(Players, models.DO_NOTHING, db_column="away_7",  blank=True, null=True)
-    away_8  = models.ForeignKey(Players, models.DO_NOTHING, db_column="away_8",  blank=True, null=True)
-    away_9  = models.ForeignKey(Players, models.DO_NOTHING, db_column="away_9",  blank=True, null=True)
-    away_10 = models.ForeignKey(Players, models.DO_NOTHING, db_column="away_10", blank=True, null=True)
-    away_11 = models.ForeignKey(Players, models.DO_NOTHING, db_column="away_11", blank=True, null=True)
+    home_1  = models.ManyToManyField(Player, db_column="home_1",  blank=True, related_name="players_h1")
+    home_2  = models.ManyToManyField(Player, db_column="home_2",  blank=True, related_name="players_h2")
+    home_3  = models.ManyToManyField(Player, db_column="home_3",  blank=True, related_name="players_h3")
+    home_4  = models.ManyToManyField(Player, db_column="home_4",  blank=True, related_name="players_h4")
+    home_5  = models.ManyToManyField(Player, db_column="home_5",  blank=True, related_name="players_h5")
+    home_6  = models.ManyToManyField(Player, db_column="home_6",  blank=True, related_name="players_h6")
+    home_7  = models.ManyToManyField(Player, db_column="home_7",  blank=True, related_name="players_h7")
+    home_8  = models.ManyToManyField(Player, db_column="home_8",  blank=True, related_name="players_h8")
+    home_9  = models.ManyToManyField(Player, db_column="home_9",  blank=True, related_name="players_h9")
+    home_10 = models.ManyToManyField(Player, db_column="home_10", blank=True, related_name="players_h10")
+    home_11 = models.ManyToManyField(Player, db_column="home_11", blank=True, related_name="players_h11")
+    away_1  = models.ManyToManyField(Player, db_column="away_1",  blank=True, related_name="players_a1")
+    away_2  = models.ManyToManyField(Player, db_column="away_2",  blank=True, related_name="players_a2")
+    away_3  = models.ManyToManyField(Player, db_column="away_3",  blank=True, related_name="players_a3")
+    away_4  = models.ManyToManyField(Player, db_column="away_4",  blank=True, related_name="players_a4")
+    away_5  = models.ManyToManyField(Player, db_column="away_5",  blank=True, related_name="players_a5")
+    away_6  = models.ManyToManyField(Player, db_column="away_6",  blank=True, related_name="players_a6")
+    away_7  = models.ManyToManyField(Player, db_column="away_7",  blank=True, related_name="players_a7")
+    away_8  = models.ManyToManyField(Player, db_column="away_8",  blank=True, related_name="players_a8")
+    away_9  = models.ManyToManyField(Player, db_column="away_9",  blank=True, related_name="players_a9")
+    away_10 = models.ManyToManyField(Player, db_column="away_10", blank=True, related_name="players_a10")
+    away_11 = models.ManyToManyField(Player, db_column="away_11", blank=True, related_name="players_a11")
     goal       = models.TextField(blank=True, null=True)
     shoton     = models.TextField(blank=True, null=True)
     shotoff    = models.TextField(blank=True, null=True)
@@ -199,11 +199,11 @@ class Matches(Model):
         db_table = "matches"
 
 
-class PlayerAttrs(Model):
+class PlayerAttr(Model):
     """Only columns without any nulls are id, pid, date"""
 
     # fmt: off
-    pid = models.ForeignKey("Players", models.DO_NOTHING, db_column="pid", **SHARED_ARGS)
+    pid = models.ForeignKey(Player, on_delete=DO_NOTHING, db_column="pid", **SHARED_ARGS)
     date = models.TextField(**SHARED_ARGS)
     overall_rating      = models.IntegerField(blank=True, null=True)
     potential           = models.IntegerField(blank=True, null=True)
@@ -250,9 +250,9 @@ class PlayerAttrs(Model):
         db_table = "player_attrs"
 
 
-class TeamAttrs(Model):
+class TeamAttr(Model):
     # fmt: off
-    tid = models.ForeignKey("Teams", models.DO_NOTHING, db_column="tid", blank=True, null=True)
+    tid = models.ForeignKey(Team, on_delete=DO_NOTHING, db_column="tid", blank=True, null=True)
     date = models.TextField(blank=True, null=True)
     buildup_play_dribbling            = models.IntegerField(blank=True, null=True)  # this has nulls
     buildup_play_speed                = models.IntegerField(**SHARED_ARGS)
