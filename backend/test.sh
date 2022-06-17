@@ -3,5 +3,6 @@ SCRIPT_DIR="$( cd -- "$( dirname -- "${BASH_SOURCE[0]:-$0}"; )" &> /dev/null && 
 PROJECT="$(dirname "$SCRIPT_DIR")"
 PYTHON=$PROJECT/.venv/bin/python
 
-$PYTHON "$PROJECT/backend/manage.py" test --keepdb
+cd "$SCRIPT_DIR" || exit 1
+$PYTHON "manage.py" test --keepdb
 

@@ -18,15 +18,27 @@ To confirm installation was successful, run
 ```bash
 npm run build_test
 npm test frontend/tests/test.test.ts
+bash /backend/test.sh
 ```
 
 The first command should compile the `.tsx` files in `frontend/apps/test_app` and place the compiled
 `.js` file in `backend/static/js/test_app`. The second command ensure Jest and `ts-jest` are correctly
-setup and that a minimal test passes, with coverage information.
+setup and that a minimal test passes, with coverage information. The final command runs Django tests.
 
 ## Testing
 
-All other frontend tests can be run with `npm test`.  Django tests can be run with [...].
+### Frontend
+
+Frontend tests can be run with `npm test`.
+
+### Backend
+
+Django tests can be run with using the shortcut script with
+
+`./backend/test.sh`
+
+or manually with `python backend/manage.py test --keepdb` (after ensuring the `.venv`
+has been activated).
 
 ## Dependencies
 
