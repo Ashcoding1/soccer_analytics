@@ -5,11 +5,13 @@
 #   * Make sure each ForeignKey and OneToOneField has `on_delete` set to the desired behavior
 #   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
 # Feel free to rename the models, but don't rename db_table values or field names.
+from typing import Mapping
+
 from django.db import models
 from django.db.models import DO_NOTHING, Model
 
-SHARED_ARGS = dict(blank=False, null=False, editable=False)
-UNIQUE_ARGS = SHARED_ARGS | dict(unique=True)
+SHARED_ARGS: Mapping = dict(blank=False, null=False, editable=False)
+UNIQUE_ARGS: Mapping = SHARED_ARGS | dict(unique=True)
 
 
 class Country(Model):
