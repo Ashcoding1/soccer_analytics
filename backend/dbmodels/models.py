@@ -19,6 +19,7 @@ class Country(Model):
     class Meta:
         managed = False
         db_table = "countries"
+        ordering = ["name"]
 
     def __str__(self) -> str:
         return f"{self.name}"
@@ -36,6 +37,7 @@ class League(Model):
     class Meta:
         managed = False
         db_table = "leagues"
+        ordering = ["name", "country"]
 
     def __str__(self) -> str:
         return f"{self.name} ({self.country})"
@@ -51,6 +53,7 @@ class Team(Model):
     class Meta:
         managed = False
         db_table = "teams"
+        ordering = ["name"]
 
     def __str__(self) -> str:
         return f"{self.name}"
@@ -69,6 +72,7 @@ class Player(Model):
     class Meta:
         managed = False
         db_table = "players"
+        ordering = ["name", "birthday", "-height", "-weight"]
 
     def __str__(self) -> str:
         return f"{self.name}, DoB: {self.birthday}"
@@ -219,6 +223,7 @@ class Match(Model):
     class Meta:
         managed = False
         db_table = "matches"
+        ordering = ["date", "stage", "country", "league"]
 
     def __str__(self) -> str:
         date = str(self.date).replace(" 00:00:00", "")
@@ -279,6 +284,7 @@ class PlayerAttr(Model):
     class Meta:
         managed = False
         db_table = "player_attrs"
+        ordering = ["player", "date", "-overall_rating"]
 
     def __str__(self) -> str:
         date = str(self.date).replace(" 00:00:00", "")
@@ -317,6 +323,7 @@ class TeamAttr(Model):
     class Meta:
         managed = False
         db_table = "team_attrs"
+        ordering = ["team", "date"]
 
     def __str__(self) -> str:
         date = str(self.date).replace(" 00:00:00", "")
