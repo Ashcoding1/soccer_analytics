@@ -23,6 +23,9 @@ echo "Installing dev dependencies to virtual environment..."
 # NOTE: see https://stackoverflow.com/a/20720019 for the approach below
 python -m pip install -r install/requirements/dev.txt
 
+NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" --no-use  # loads nvm
+
 if ! command -v nvm &> /dev/null
 then
     echo "Error: command \`nvm\` could not be found"
