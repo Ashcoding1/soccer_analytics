@@ -9,4 +9,4 @@ echo "done."
 echo "Cleaning up..."
 rm -rvf broken_db
 echo "Success. Cleaned db available at:"
-echo "/backend/db.sqlite3"
+echo "./backend/db.sqlite3"
