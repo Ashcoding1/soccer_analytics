@@ -5,11 +5,13 @@
 #   * Make sure each ForeignKey and OneToOneField has `on_delete` set to the desired behavior
 #   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
 # Feel free to rename the models, but don't rename db_table values or field names.
+from typing import Mapping
+
 from django.db import models
 from django.db.models import DO_NOTHING, Model
 
-SHARED_ARGS = dict(blank=False, null=False, editable=False)
-UNIQUE_ARGS = SHARED_ARGS | dict(unique=True)
+SHARED_ARGS: Mapping = dict(blank=False, null=False, editable=False)
+UNIQUE_ARGS: Mapping = SHARED_ARGS | dict(unique=True)
 
 
 class Country(Model):
@@ -19,6 +21,7 @@ class Country(Model):
     class Meta:
         managed = False
         db_table = "countries"
+        ordering = ["name"]
 
     def __str__(self) -> str:
         return f"{self.name}"
@@ -36,6 +39,7 @@ class League(Model):
     class Meta:
         managed = False
         db_table = "leagues"
+        ordering = ["name", "country"]
 
     def __str__(self) -> str:
         return f"{self.name} ({self.country})"
@@ -51,6 +55,7 @@ class Team(Model):
     class Meta:
         managed = False
         db_table = "teams"
+        ordering = ["name"]
 
     def __str__(self) -> str:
         return f"{self.name}"
@@ -69,6 +74,7 @@ class Player(Model):
     class Meta:
         managed = False
         db_table = "players"
+        ordering = ["name", "birthday", "-height", "-weight"]
 
     def __str__(self) -> str:
         return f"{self.name}, DoB: {self.birthday}"
@@ -219,6 +225,7 @@ class Match(Model):
     class Meta:
         managed = False
         db_table = "matches"
+        ordering = ["date", "stage", "country", "league"]
 
     def __str__(self) -> str:
         date = str(self.date).replace(" 00:00:00", "")
@@ -279,6 +286,7 @@ class PlayerAttr(Model):
     class Meta:
         managed = False
         db_table = "player_attrs"
+        ordering = ["player", "date", "-overall_rating"]
 
     def __str__(self) -> str:
         date = str(self.date).replace(" 00:00:00", "")
@@ -317,6 +325,7 @@ class TeamAttr(Model):
     class Meta:
         managed = False
         db_table = "team_attrs"
+        ordering = ["team", "date"]
 
     def __str__(self) -> str:
         date = str(self.date).replace(" 00:00:00", "")
