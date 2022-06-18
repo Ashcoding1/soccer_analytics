@@ -1,5 +1,6 @@
-from dbmodels.models import Country, League, Match, Player, PlayerAttr, Team, TeamAttr
 from django.test import TestCase
+
+from dbmodels.models import Country, League, Match, Player, PlayerAttr, Team, TeamAttr
 
 # Create your tests here.
 
@@ -26,15 +27,15 @@ KRC Genk vs Beerschot AC - 1 / 1"""
 
     def test_player(self) -> None:
         s = str(Player.objects.all()[0])
-        assert s == "Patryk Rachwal,18, DoB: 1981-01-27 00:00:00", s
+        assert s == "Aaron Appindangoye, DoB: 1992-02-29", s
 
     def test_player_attr(self) -> None:
         s = str(PlayerAttr.objects.get(pk=1))
         assert s == "PlayerAttr(name=Aaron Appindangoye, date=2016-02-18, rating=67)", s
 
     def test_team(self) -> None:
-        s = str(Team.objects.all()[1])
-        assert s == "Oud-Heverlee Leuven", s
+        s = str(Team.objects.all()[10])
+        assert s == "AS Nancy-Lorraine", s
 
     def test_team_attr(self) -> None:
         s = str(TeamAttr.objects.get(pk=1))
