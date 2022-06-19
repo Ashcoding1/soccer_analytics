@@ -1,5 +1,6 @@
-from dbmodels.models import Country, League, Match, Player, PlayerAttr, Team, TeamAttr
 from django.contrib import admin
+
+from dbmodels.models import Country, League, Match, Player, PlayerAttr, Team, TeamAttr
 
 # Register your models here.
 admin.site.register(Country)
