@@ -1,4 +1,8 @@
 export {};
 
-console.log("Hello from JS");
-console.log("Another message arrives");
+async function main() {
+    console.log("Hello from JS");
+    console.log("Another message arrives");
+}
+
+main();
