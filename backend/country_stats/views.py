@@ -13,7 +13,10 @@ def index(request: HttpRequest) -> HttpResponse:
     countries = Country.objects.values_list("name", flat=True)
     context: dict[str, list[str]] = dict(countries=[*countries])
 
-    # to use a template
-    # return render(request, template_name="index.html", context=context)
+    # just return the string in a HttpResponse
+    # return HttpResponse(content=json.dumps(context))
 
-    return JsonResponse(data=context)
+    # to use a template
+    return render(request, template_name="index.html", context=context)
+
+    # return JsonResponse(data=context)
