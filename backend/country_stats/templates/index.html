@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Country stats{% endblock %}
+{% block scripts %}
+{% load static %}
+<script src="{% static 'js/country_stats/index.js' %}"></script>
+{% endblock %}
+
+<div id="content">
+  {% block content %}
+  <ul>
+    {% for country in countries %}
+    <li>{{country}}</li>
+    {% endfor %}
+  </ul>
+  {% endblock %}
+</div>

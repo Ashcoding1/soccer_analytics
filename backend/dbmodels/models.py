@@ -77,7 +77,8 @@ class Player(Model):
         ordering = ["name", "birthday", "-height", "-weight"]
 
     def __str__(self) -> str:
-        return f"{self.name}, DoB: {self.birthday}"
+        birthdate = str(self.birthday).replace(" 00:00:00", "")
+        return f"{self.name}, DoB: {birthdate}"
 
     __repr__ = __str__
 
