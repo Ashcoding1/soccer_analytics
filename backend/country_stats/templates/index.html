@@ -2,15 +2,28 @@
 {% block title %}Country stats{% endblock %}
 {% block scripts %}
 {% load static %}
-<script src="{% static 'js/country_stats/index.js' %}"></script>
+<script src="{% static 'js/country_stats/index.js' %}" defer></script>
 {% endblock %}
 
 <div id="content">
   {% block content %}
-  <ul>
-    {% for country in countries %}
-    <li>{{country}}</li>
-    {% endfor %}
-  </ul>
+  <form>
+    <fieldset>
+      <legend>Choose a country to explore:</legend>
+      {% for country in countries %}
+
+      <input type="radio" id="{{country}}" name="country">
+      <label for="{{country}}">{{country}}</label><br />
+
+      {% endfor %}
+    </fieldset>
+  </form>
   {% endblock %}
 </div>
+
+
+<ul>
+  {% for country in countries %}
+  <li>{{country}}</li>
+  {% endfor %}
+</ul>

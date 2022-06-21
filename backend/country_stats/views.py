@@ -20,3 +20,8 @@ def index(request: HttpRequest) -> HttpResponse:
     return render(request, template_name="index.html", context=context)
 
     # return JsonResponse(data=context)
+
+
+def get_seasons(request: HttpRequest) -> HttpResponse:
+    print(request)
+    return HttpResponse(body=f"Got {request}")
