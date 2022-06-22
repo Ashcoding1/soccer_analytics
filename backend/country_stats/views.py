@@ -4,7 +4,7 @@ from django.http.request import HttpRequest
 from django.http.response import HttpResponse, JsonResponse
 from django.shortcuts import render
 
-from dbmodels.models import Country
+from dbmodels.models import Country, Match
 
 # Create your views here.
 
@@ -22,6 +22,11 @@ def index(request: HttpRequest) -> HttpResponse:
     # return JsonResponse(data=context)
 
 
-def get_seasons(request: HttpRequest) -> HttpResponse:
-    print(request)
-    return HttpResponse(body=f"Got {request}")
+def get_seasons(request: HttpRequest, country: str) -> HttpResponse:
+    seasons = (
+        Match.objects.filter(country__name__iexact=country)
+        .order_by()
+        .values_list("season", flat=True)
+        .distinct()
+    )
+    return JsonResponse(data=dict(seasons=[*seasons]))
